@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from pynamodb.models import Model
 from pynamodb.attributes import (
@@ -13,7 +14,7 @@ class Event(Model):
     """
     class Meta:
         table_name = "events"
-        host = "http://localhost:8000"
+        host = os.getenv('DYNAMODB_HOST', None)
     aggregate_name = UnicodeAttribute(hash_key=True)
     aggregate_id = UnicodeAttribute(range_key=True)
     event_type = UnicodeAttribute()
@@ -33,7 +34,7 @@ class Snapshot(Model):
 
     class Meta:
         table_name = "snapshots"
-        host = "http://localhost:8000"
+        host = os.getenv('DYNAMODB_HOST', None)
     aggregate_name = UnicodeAttribute(hash_key=True)
     aggregate_key = UnicodeAttribute(range_key=True)
     created_at = UTCDateTimeAttribute()

@@ -2,5 +2,15 @@ version: '2'
 services:
   dynamodb:
     image: peopleperhour/dynamodb
-    ports:
-      - "8000:8000"
+  app:
+    build: .
+    working_dir: /code
+    command: nosetests -x -s --nologcapture
+    depends_on:
+      - dynamodb
+    volumes:
+      - .:/code
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      DYNAMODB_HOST: http://dynamodb:8000
