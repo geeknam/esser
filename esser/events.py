@@ -1,7 +1,7 @@
 from datetime import datetime
 import uuid
 from pynamodb.exceptions import PutError
-from cerberus import Validator
+from esser.validators import EsserValidator
 from esser.constants import AGGREGATE_KEY_DELIMITER
 from esser.exceptions import EventValidationException, IntegrityError
 from esser.models import Event
@@ -16,7 +16,7 @@ class BaseEvent(object):
 
         A valid Event class should have Event.schema
         """
-        self.validator = Validator(self.schema)
+        self.validator = EsserValidator(self.schema)
 
     @property
     def event_name(self):
@@ -35,6 +35,7 @@ class BaseEvent(object):
     def attach_entity(self, entity):
         """Allow entity to be attached to the event."""
         setattr(self, 'entity', entity)
+        setattr(self.validator, 'aggregate', entity)
 
     def persist(self, attrs):
         """Persist event in dynamodb."""

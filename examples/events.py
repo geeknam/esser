@@ -12,7 +12,17 @@ class ItemCreated(CreateEvent):
 class PriceUpdated(BaseEvent):
 
     schema = {
-        'price': {'type': 'float'}
+        'price': {'type': 'float', 'diff': True}
+    }
+
+
+class ColorsAdded(BaseEvent):
+
+    schema = {
+        'colors': {
+            'type': 'set',
+            'allowed': ['orange', 'black', 'white', 'blue', 'green']
+        }
     }
 
 

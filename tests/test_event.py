@@ -39,6 +39,8 @@ class EventTestCase(unittest.TestCase):
             self.item.current_state,
             {'name': 'Yummy Choc', 'price': 12.50, 'latest_version': 2}
         )
+        with self.assertRaises(EventValidationException):
+            self.item.price_updated.save(attrs={'price': 12.50})
 
     def test_delete(self):
         self.item.created.save(

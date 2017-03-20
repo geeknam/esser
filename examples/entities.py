@@ -15,10 +15,15 @@ class ItemReducer(BaseReducer):
         aggregate['price'] = next_event.event_data['price']
         return aggregate
 
+    def on_colors_added(self, aggregate, next_event):
+        aggregate['colors'] = next_event.event_data['colors']
+        return aggregate
+
 
 class Item(Entity):
 
     reducer = ItemReducer()
     price_updated = events.PriceUpdated()
+    colors_added = events.ColorsAdded()
     created = events.ItemCreated()
     deleted = events.Deleted()
