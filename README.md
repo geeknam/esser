@@ -2,8 +2,11 @@ esser - [E]vent [S]ourcing [Ser]verlessly
 ============================================
 
 [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=geeknam&repoName=esser&branch=master&pipelineName=esser&accountName=namngology&type=cf-1)]( https://g.codefresh.io/repositories/geeknam/esser/builds?filter=trigger:build;branch:master;service:58ce8dac6fc4340100512873~esser)
-[![Code Issues](https://www.quantifiedcode.com/api/v1/project/2644f358dc5246da951352fb0550f84f/badge.svg)](https://www.quantifiedcode.com/app/project/2644f358dc5246da951352fb0550f84f)
+[![Build Status](https://travis-ci.org/geeknam/esser.svg?branch=master)](https://travis-ci.org/geeknam/esser)
 [![Coverage Status](https://coveralls.io/repos/github/geeknam/esser/badge.svg?branch=master)](https://coveralls.io/github/geeknam/esser?branch=master)
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/2644f358dc5246da951352fb0550f84f/badge.svg)](https://www.quantifiedcode.com/app/project/2644f358dc5246da951352fb0550f84f)
+
+
 
 - Serverless + Pay-As-You-Go
 - Aggregates

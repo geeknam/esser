@@ -5,7 +5,7 @@ services:
   app:
     build: .
     working_dir: /code
-    command: nosetests -x -s --nologcapture
+    command: bash runtest.sh
     depends_on:
       - dynamodb
     volumes:
@@ -14,3 +14,4 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       DYNAMODB_HOST: http://dynamodb:8000
+      COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}

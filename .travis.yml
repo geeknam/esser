@@ -1,7 +1,7 @@
 sudo: required
+language: python
 services:
   - docker
 
 script:
-  - sleep 1
   - docker-compose run app
