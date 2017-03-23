@@ -1,7 +1,7 @@
 import unittest
 
 from esser.models import Event, Snapshot
-from examples.entities import Item
+from examples.items.aggregate import Item
 
 
 class SnapshotTestCase(unittest.TestCase):

@@ -29,7 +29,8 @@ class BaseReducer(object):
         return aggregate
 
     def on_created(self, aggregate, next_event):
-        return next_event.event_data.as_dict()
+        aggregate.update(next_event.event_data.as_dict())
+        return aggregate
 
     def on_updated(self, aggregate, next_event):
         aggregate.update(next_event.event_data.as_dict())

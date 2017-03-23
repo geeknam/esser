@@ -2,7 +2,7 @@ import unittest
 from mock import patch
 from esser.handlers import handle_event
 from esser.models import Event
-from examples.entities import Item
+from examples.items.aggregate import Item
 
 
 class HandlerTestCase(unittest.TestCase):

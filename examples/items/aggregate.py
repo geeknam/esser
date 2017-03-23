@@ -1,6 +1,6 @@
 from esser.entities import Entity
 from esser.reducer import BaseReducer
-from examples import events
+from examples.items import events
 
 
 class ItemReducer(BaseReducer):

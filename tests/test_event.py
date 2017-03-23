@@ -4,7 +4,8 @@ import mock
 from esser.models import Event
 from esser.exceptions import EventValidationException, IntegrityError
 
-from examples.entities import Item
+from examples.items.aggregate import Item
+from examples.collections.aggregate import Collection
 
 
 class EventTestCase(unittest.TestCase):
@@ -14,6 +15,7 @@ class EventTestCase(unittest.TestCase):
             read_capacity_units=1, write_capacity_units=1
         )
         self.item = Item()
+        self.collection = Collection()
 
     def tearDown(self):
         Event.delete_table()
@@ -24,7 +26,7 @@ class EventTestCase(unittest.TestCase):
         )
         self.assertEquals(
             self.item.current_state,
-            {'name': 'Yummy Choc', 'price': 10.50}
+            {'name': 'Yummy Choc', 'price': 10.50, 'latest_version': 1}
         )
 
     def test_price_update(self):
@@ -76,3 +78,23 @@ class EventTestCase(unittest.TestCase):
             self.item.created.save(
                 attrs={'name': 'Bubble gum', 'price': 11.50}
             )
+
+    def test_composition(self):
+        self.collection.created.save(attrs={'name': 'Favorite Food'})
+        event = self.item.created.save(
+            attrs={
+                'name': 'Yummy Choc',
+                'price': 10.50
+            }
+        )
+        self.collection.item_added.save(attrs={'aggregate_id': event.guid})
+        self.assertEquals(
+            self.collection.current_state,
+            {
+                'items': [
+                    {'latest_version': 1, 'name': 'Yummy Choc', 'price': 10.5}
+                ],
+                'latest_version': 2,
+                'name': 'Favorite Food'
+            }
+        )

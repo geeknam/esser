@@ -21,6 +21,9 @@ class Entity(object):
     def get_last_snapshot(self):
         return {}
 
+    def get_initial_state(self):
+        return {}
+
     def get_events(self, version):
         """
         Get all events up to specific version
@@ -54,13 +57,13 @@ class Entity(object):
 
     def get_state_at(self, version):
         sequence = self.get_events(version)
-        initial_state = self.get_last_snapshot() or {}
+        initial_state = self.get_last_snapshot() or self.get_initial_state()
         return reduce(self.reducer.reduce, sequence, initial_state)
 
     @property
     def current_state(self):
         sequence = self.get_all_events()
-        initial_state = self.get_last_snapshot() or {}
+        initial_state = self.get_last_snapshot() or self.get_initial_state()
         return reduce(self.reducer.reduce, sequence, initial_state)
 
     def get_last_aggregate_version(self):

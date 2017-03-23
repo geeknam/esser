@@ -2,7 +2,7 @@ import unittest
 from mock import patch
 from esser.models import Event
 from esser.exceptions import AggregateDoesNotExist
-from examples.entities import Item
+from examples.items.aggregate import Item
 
 
 class EntityTestCase(unittest.TestCase):
