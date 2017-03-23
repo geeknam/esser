@@ -22,7 +22,7 @@ class HandlerTestCase(unittest.TestCase):
         event = {
             'EventName': 'ItemCreated',
             'AggregateId': None,
-            'AggregateClassPath': 'examples.entities.Item',
+            'AggregateClassPath': 'examples.items.aggregate.Item',
             'Payload': {
                 'name': 'Handler Item',
                 'price': 15.0
@@ -33,7 +33,7 @@ class HandlerTestCase(unittest.TestCase):
         event = {
             'EventName': 'PriceUpdated',
             'AggregateId': 'mykey',
-            'AggregateClassPath': 'examples.entities.Item',
+            'AggregateClassPath': 'examples.items.aggregate.Item',
             'Payload': {'price': 12.0}
         }
         result = handle_event(event, {})
