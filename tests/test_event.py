@@ -106,3 +106,7 @@ class EventTestCase(unittest.TestCase):
             self.collection.current_state,
             {'items': [{}], 'latest_version': 2, u'name': u'Favorite Food'}
         )
+        with self.assertRaises(EventValidationException):
+            self.collection.item_added_with_validation.save(
+                attrs={'aggregate_id': 'incorrectid'}
+            )

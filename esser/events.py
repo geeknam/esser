@@ -12,7 +12,9 @@ class BaseEvent(object):
 
         A valid Event class should have Event.schema
         """
-        self.validator = EsserValidator(self.schema)
+        self.validator = EsserValidator(
+            self.schema, event=self
+        )
 
     @property
     def event_name(self):

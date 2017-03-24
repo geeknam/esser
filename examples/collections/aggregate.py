@@ -22,6 +22,7 @@ class Collection(Entity):
     reducer = CollectionReducer()
     created = events.CollectionCreated()
     item_added = events.ItemAdded()
+    item_added_with_validation = events.ItemAddedWithExistanceValidation()
 
     def get_initial_state(self):
         return {
