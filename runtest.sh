@@ -7,4 +7,4 @@ nosetests --with-coverage --cover-package=esser
 coveralls
 
 travis-sphinx --outdir=docs/build build
-travis-sphinx deploy
+travis-sphinx --outdir=docs/build deploy
