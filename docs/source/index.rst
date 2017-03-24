@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 esser - [E]vent [S]ourcing [Ser]verlessly
-=================================
+===========================================
 
 .. toctree::
    :maxdepth: 2

@@ -5,3 +5,4 @@ nose
 coveralls
 sphinx
 sphinx-autobuild
+travis-sphinx
