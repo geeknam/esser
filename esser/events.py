@@ -1,10 +1,6 @@
-from datetime import datetime
-import uuid
-from pynamodb.exceptions import PutError
 from esser.validators import EsserValidator
 from esser.constants import AGGREGATE_KEY_DELIMITER
-from esser.exceptions import EventValidationException, IntegrityError
-from esser.models import Event
+from esser.exceptions import EventValidationException
 
 
 class BaseEvent(object):
@@ -38,26 +34,11 @@ class BaseEvent(object):
         setattr(self.validator, 'aggregate', entity)
 
     def persist(self, attrs):
-        """Persist event in dynamodb."""
-        event = Event(
-            aggregate_name=self.entity.aggregate_name,
+        return self.entity.repository.persist(
             aggregate_id=self.get_aggregate_key(),
             event_type=self.event_name,
-            created_at=datetime.utcnow(),
-            event_data=attrs
+            attrs=attrs
         )
-        try:
-            event.save(
-                aggregate_name__ne=event.aggregate_name,
-                aggregate_id__ne=event.aggregate_id,
-                conditional_operator='and'
-            )
-        except PutError:
-            raise IntegrityError(errors={
-                'aggregate_name': event.aggregate_name,
-                'aggregate_id': event.aggregate_id,
-            })
-        return event
 
     def save(self, attrs):
         """Validate event input before saving."""
@@ -73,7 +54,7 @@ class CreateEvent(BaseEvent):
 
     def save(self, attrs):
         """Generate aggregate id using uuid."""
-        aggregate_id = str(uuid.uuid4())
+        aggregate_id = self.entity.generate_new_guid()
         self.entity.aggregate_id = aggregate_id
         return super(CreateEvent, self).save(attrs)
 

@@ -44,13 +44,13 @@ class EntityTestCase(unittest.TestCase):
         )
         self.item.price_updated.save(attrs={'price': 12.50})
         self.assertEquals(
-            len(list(self.item.get_all_events())), 2
+            len(list(self.item.repository.get_all_events())), 2
         )
         Item().created.save(
             attrs={'name': 'Pizza', 'price': 15.50}
         )
         self.assertEquals(
-            len(list(self.item.get_all_events())), 2
+            len(list(self.item.repository.get_all_events())), 2
         )
 
     def test_get_last_aggregate_version(self):

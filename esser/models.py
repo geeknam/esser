@@ -43,7 +43,7 @@ class Snapshot(Model):
     @classmethod
     def from_aggregate(cls, aggregate):
         state = aggregate.current_state
-        last_event = aggregate.get_last_event()
+        last_event = aggregate.repository.get_last_event()
         snapshot = cls(
             aggregate_name=aggregate.aggregate_name,
             aggregate_key=last_event.aggregate_id,

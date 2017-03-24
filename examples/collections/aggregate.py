@@ -16,7 +16,9 @@ class CollectionReducer(BaseReducer):
 
 
 class Collection(Entity):
-
+    """
+    Collection is an Aggregate root
+    """
     reducer = CollectionReducer()
     created = events.CollectionCreated()
     item_added = events.ItemAdded()

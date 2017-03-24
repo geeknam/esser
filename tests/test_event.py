@@ -98,3 +98,11 @@ class EventTestCase(unittest.TestCase):
                 'name': 'Favorite Food'
             }
         )
+
+    def test_composition_invalid_id(self):
+        self.collection.created.save(attrs={'name': 'Favorite Food'})
+        self.collection.item_added.save(attrs={'aggregate_id': 'incorrectid'})
+        self.assertEquals(
+            self.collection.current_state,
+            {'items': [{}], 'latest_version': 2, u'name': u'Favorite Food'}
+        )
