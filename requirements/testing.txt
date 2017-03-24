@@ -3,3 +3,5 @@
 mock
 nose
 coveralls
+sphinx
+sphinx-autobuild
