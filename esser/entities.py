@@ -6,12 +6,18 @@ from esser.repositories.base import DynamoDBRepository
 
 
 class Entity(object):
+    """
+    Class representing an Aggregate in Event Sourcing
+    """
 
     INITIAL_VERSION = 1
 
     repository_class = DynamoDBRepository
 
     def __init__(self, aggregate_id=None):
+        """
+        If aggregate_id is None, only Created events can be fired
+        """
         self.aggregate_id = aggregate_id
         for name, value in self.__class__.__dict__.items():
             if isinstance(value, BaseEvent):
