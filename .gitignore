@@ -1,4 +1,11 @@
 *.pyc
 *.coverage
+
+# build
+*esser.egg-info/
+*dist/
+*build/
+
+# docs
 *docs/build/*
 *target

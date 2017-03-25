@@ -24,3 +24,14 @@ services:
 
 script:
   - docker-compose run app
+
+deploy:
+  - provider: pypi
+    distributions: sdist
+    user: "geeknam"
+    password:
+      secure: "Fy6mxAyBDy/6GC7v+AMfNJrxLq4nZ4w5fR0Gueldfd279bHEsTtgv+Q1tHH0JpOv9jbteGTdNKnxBfD5p/WavGsL1FTXYISjTPwoK0Y5MVY5Zj3qadtdGRpophsiCcp52ZPcJtP1DadwLuUivaAQrJP1eDALrejSY5lOf9Qw2dBzDsLAvzI1JoCfqhOaIGNIORl6yjUw5qfaCuQ/WDtzwsuIP8idK/+KMz3PN/kLzUwoihALnd+e/kZ0VPqnkeXiLj0DtsL5+jyF38ow3QZKv0TVi/7dLLwHNewSbRjfrSTq1KeTEnZKKlD5P/zgeylrG51NZzHzF0s4w1E2XlDQo9sf1gIF192Clzpe7sasZPmB+d5KT5x+O6gNO2jTwWmup5C40+1D4bgPEAf7X5Ej2Hd8SIydxJcTX3C6kTEiBTEuKPkzF3R/r8/WcqyzPwzTF0D1GjqtCt8uXWttQr0jR7A+BPCwBdUaWvh0EYNxvAcE9gKeLUfQxJF+ahVVu2w32S5zM7te2Nr0+tUDgWQNo7YhcVtdso7PYZpLaTkEKhuXhh1xhYV6LOog+8RR2gwC5n+t2ACqZxI6697NMrmOBNIS+ophSzqz7iEVa4XmdFCZ3EG/7pcMc8LGfK4qlsDwB1L6V2nzWZyj3BFHyWB690uhQ3ZdJaNA8DEZCJQ2wNo="
+    on:
+      branch: master
+      tags: true
+
