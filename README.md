@@ -7,7 +7,6 @@ esser - [E]vent [S]ourcing [Ser]verlessly
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/2644f358dc5246da951352fb0550f84f/badge.svg)](https://www.quantifiedcode.com/app/project/2644f358dc5246da951352fb0550f84f)
 
 
-
 - Serverless + Pay-As-You-Go
 - Aggregates
 - Snapshots
