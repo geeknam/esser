@@ -1,6 +1,8 @@
 esser - [E]vent [S]ourcing [Ser]verlessly
 ============================================
 
+[![Join the chat at https://gitter.im/esser-chat/Lobby](https://badges.gitter.im/esser-chat/Lobby.svg)](https://gitter.im/esser-chat/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![pypi version]( https://img.shields.io/pypi/v/esser.svg)]( https://pypi.python.org/pypi/esser)
 [![pypi package]( https://img.shields.io/pypi/dm/esser.svg)]( https://pypi.python.org/pypi/esser)
 [![Build Status](https://travis-ci.org/geeknam/esser.svg?branch=master)](https://travis-ci.org/geeknam/esser)
