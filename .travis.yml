@@ -3,24 +3,24 @@ language: python
 services:
   - docker
 
-cache:
-  directories:
-  - $CACHE_DIR
+# cache:
+#   directories:
+#   - $CACHE_DIR
 
-before_install:
-  - if [ -f ${CACHE_FILE_PYTHON} ]; then gunzip -c ${CACHE_FILE_PYTHON} | docker load; fi
-  - if [ -f ${CACHE_FILE_DYNAMODB} ]; then gunzip -c ${CACHE_FILE_DYNAMODB} | docker load; fi
+# before_install:
+#   - if [ -f ${CACHE_FILE_PYTHON} ]; then gunzip -c ${CACHE_FILE_PYTHON} | docker load; fi
+#   - if [ -f ${CACHE_FILE_DYNAMODB} ]; then gunzip -c ${CACHE_FILE_DYNAMODB} | docker load; fi
 
-install:
-  - mkdir -p $CACHE_DIR
-  - if [ ! -f ${CACHE_FILE_PYTHON} ]; then docker save python:2.7.12 | gzip > ${CACHE_FILE_PYTHON}; fi
-  - if [ ! -f ${CACHE_FILE_DYNAMODB} ]; then docker save peopleperhour/dynamodb:latest | gzip > ${CACHE_FILE_DYNAMODB}; fi
+# install:
+#   - mkdir -p $CACHE_DIR
+#   - if [ ! -f ${CACHE_FILE_PYTHON} ]; then docker save python:2.7.12 | gzip > ${CACHE_FILE_PYTHON}; fi
+#   - if [ ! -f ${CACHE_FILE_DYNAMODB} ]; then docker save peopleperhour/dynamodb:latest | gzip > ${CACHE_FILE_DYNAMODB}; fi
 
-env:
-  global:
-    - CACHE_DIR=$HOME/.cache/docker
-    - CACHE_FILE_PYTHON=$CACHE_DIR/python.tar.gz
-    - CACHE_FILE_DYNAMODB=$CACHE_DIR/dynamodb.tar.gz
+# env:
+#   global:
+#     - CACHE_DIR=$HOME/.cache/docker
+#     - CACHE_FILE_PYTHON=$CACHE_DIR/python.tar.gz
+#     - CACHE_FILE_DYNAMODB=$CACHE_DIR/dynamodb.tar.gz
 
 script:
   - docker-compose run app
