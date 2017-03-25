@@ -6,5 +6,5 @@ set -e
 nosetests --with-coverage --cover-package=esser
 coveralls
 
-travis-sphinx build
-travis-sphinx deploy
+travis-sphinx -n build
+travis-sphinx -n deploy
