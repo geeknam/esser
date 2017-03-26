@@ -1,5 +1,6 @@
 import re
 from esser.constants import AGGREGATE_KEY_DELIMITER
+from esser.exceptions import AggregateDeleted
 
 re_camel_case = re.compile(r'(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))')
 
@@ -23,9 +24,7 @@ class BaseReducer(object):
         return aggregate
 
     def update_version(self, aggregate, next_event):
-        aggregate['latest_version'] = int(next_event.aggregate_id.split(
-            AGGREGATE_KEY_DELIMITER
-        )[1])
+        aggregate['latest_version'] = next_event.version
         return aggregate
 
     def on_created(self, aggregate, next_event):
@@ -37,7 +36,7 @@ class BaseReducer(object):
         return aggregate
 
     def on_deleted(self, aggregate, next_event):
-        return
+        raise AggregateDeleted()
 
     def on_attribute_deleted(self, aggregate, next_event):
         for attr in next_event.event_data.get('attributes', []):

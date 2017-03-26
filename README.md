@@ -1,13 +1,12 @@
 esser - [E]vent [S]ourcing [Ser]verlessly
 ============================================
 
-[![Join the chat at https://gitter.im/esser-chat/Lobby](https://badges.gitter.im/esser-chat/Lobby.svg)](https://gitter.im/esser-chat/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![pypi version]( https://img.shields.io/pypi/v/esser.svg)]( https://pypi.python.org/pypi/esser)
 [![pypi package]( https://img.shields.io/pypi/dm/esser.svg)]( https://pypi.python.org/pypi/esser)
 [![Build Status](https://travis-ci.org/geeknam/esser.svg?branch=master)](https://travis-ci.org/geeknam/esser)
 [![Coverage Status](https://coveralls.io/repos/github/geeknam/esser/badge.svg?branch=master)](https://coveralls.io/github/geeknam/esser?branch=master)
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/2644f358dc5246da951352fb0550f84f/badge.svg)](https://www.quantifiedcode.com/app/project/2644f358dc5246da951352fb0550f84f)
+[![Join the chat at https://gitter.im/esser-chat/Lobby](https://badges.gitter.im/esser-chat/Lobby.svg)](https://gitter.im/esser-chat/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 - Serverless + Pay-As-You-Go

@@ -15,3 +15,10 @@ class EventValidationException(Exception):
 
 class AggregateDoesNotExist(Exception):
     pass
+
+
+class AggregateDeleted(Exception):
+    """
+    Raised when aggregate contains a DeleteEvent
+    """
+    pass

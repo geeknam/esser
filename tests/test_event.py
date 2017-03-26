@@ -2,7 +2,7 @@ import unittest
 import mock
 
 from esser.models import Event
-from esser.exceptions import EventValidationException, IntegrityError
+from esser import exceptions
 
 from examples.items.aggregate import Item
 from examples.collections.aggregate import Collection
@@ -41,7 +41,7 @@ class EventTestCase(unittest.TestCase):
             self.item.current_state,
             {'name': 'Yummy Choc', 'price': 12.50, 'latest_version': 2}
         )
-        with self.assertRaises(EventValidationException):
+        with self.assertRaises(exceptions.EventValidationException):
             self.item.price_updated.save(attrs={'price': 12.50})
 
     def test_delete(self):
@@ -49,18 +49,15 @@ class EventTestCase(unittest.TestCase):
             attrs={'name': 'Yummy Choc', 'price': 10.50}
         )
         self.item.deleted.save(attrs={'deleted_by': 'John'})
-        # self.item.price_updated.save(
-        #     aggregate_id=event.guid,
-        #     attrs={'price': 12.50}
-        # )
-        self.assertEquals(self.item.current_state, None)
+        with self.assertRaises(exceptions.AggregateDeleted):
+            self.item.current_state
 
     def test_validation(self):
-        with self.assertRaises(EventValidationException):
+        with self.assertRaises(exceptions.EventValidationException):
             self.item.created.save(
                 attrs={'name': 'Yummy Choc', 'price': '10.50'}
             )
-        with self.assertRaises(EventValidationException):
+        with self.assertRaises(exceptions.EventValidationException):
             self.item.created.save(
                 attrs={
                     'name': 'Yummy Choc', 'price': 10.50,
@@ -74,7 +71,7 @@ class EventTestCase(unittest.TestCase):
         self.item.created.save(
             attrs={'name': 'Yummy Choc', 'price': 10.50}
         )
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(exceptions.IntegrityError):
             self.item.created.save(
                 attrs={'name': 'Bubble gum', 'price': 11.50}
             )
@@ -87,7 +84,9 @@ class EventTestCase(unittest.TestCase):
                 'price': 10.50
             }
         )
-        self.collection.item_added.save(attrs={'aggregate_id': event.guid})
+        self.collection.item_added.save(
+            attrs={'aggregate_id': event.aggregate_id}
+        )
         self.assertEquals(
             self.collection.current_state,
             {
@@ -106,7 +105,7 @@ class EventTestCase(unittest.TestCase):
             self.collection.current_state,
             {'items': [{}], 'latest_version': 2, u'name': u'Favorite Food'}
         )
-        with self.assertRaises(EventValidationException):
+        with self.assertRaises(exceptions.EventValidationException):
             self.collection.item_added_with_validation.save(
                 attrs={'aggregate_id': 'incorrectid'}
             )

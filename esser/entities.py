@@ -3,6 +3,7 @@ import uuid
 from esser.events import BaseEvent
 from esser.constants import AGGREGATE_KEY_DELIMITER
 from esser.repositories.base import DynamoDBRepository
+from esser.utils import cached_property
 
 
 class Entity(object):
@@ -48,14 +49,14 @@ class Entity(object):
         initial_state = self.get_last_snapshot() or self.get_initial_state()
         return reduce(self.reducer.reduce, sequence, initial_state)
 
-    @property
-    def current_state(self):
+    def get_current_state(self):
         sequence = self.repository.get_all_events()
         initial_state = self.get_last_snapshot() or self.get_initial_state()
         return reduce(self.reducer.reduce, sequence, initial_state)
 
+    current_state = property(get_current_state)
+    cached_current_state = cached_property(get_current_state)
+
     def get_last_aggregate_version(self):
         last_event = self.repository.get_last_event()
-        return int(
-            last_event.aggregate_id.split(AGGREGATE_KEY_DELIMITER)[1]
-        )
+        return last_event.version

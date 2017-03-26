@@ -16,7 +16,7 @@ class Event(Model):
         table_name = "events"
         host = os.getenv('DYNAMODB_HOST', None)
     aggregate_name = UnicodeAttribute(hash_key=True)
-    aggregate_id = UnicodeAttribute(range_key=True)
+    aggregate_key = UnicodeAttribute(range_key=True)
     event_type = UnicodeAttribute()
     created_at = UTCDateTimeAttribute()
     event_data = MapAttribute()
@@ -26,8 +26,14 @@ class Event(Model):
         pass
 
     @property
-    def guid(self):
-        return self.aggregate_id.split(AGGREGATE_KEY_DELIMITER)[0]
+    def aggregate_id(self):
+        return self.aggregate_key.split(AGGREGATE_KEY_DELIMITER)[0]
+
+    @property
+    def version(self):
+        return int(self.aggregate_key.split(
+            AGGREGATE_KEY_DELIMITER
+        )[1])
 
 
 class Snapshot(Model):
@@ -57,5 +63,5 @@ class Snapshot(Model):
     def get_last_for(cls, aggregate, aggregate_id):
         cls.query(
             aggregate.aggregate_name,
-            aggregate_id__begins_with=aggregate_id
+            aggregate_key__begins_with=aggregate_id
         )

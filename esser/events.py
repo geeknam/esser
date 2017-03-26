@@ -21,14 +21,9 @@ class BaseEvent(object):
         """Event name by default is the class name."""
         return self.__class__.__name__
 
-    def get_aggregate_key(self):
+    def get_version(self):
         """Increment version of the event for the aggregate."""
-        version = self.entity.get_last_aggregate_version() + 1
-        return '{aggregate_id}{delimiter}{version}'.format(
-            aggregate_id=self.entity.aggregate_id,
-            delimiter=AGGREGATE_KEY_DELIMITER,
-            version=version
-        )
+        return self.entity.get_last_aggregate_version() + 1
 
     def attach_entity(self, entity):
         """Allow entity to be attached to the event."""
@@ -37,7 +32,8 @@ class BaseEvent(object):
 
     def persist(self, attrs):
         return self.entity.repository.persist(
-            aggregate_id=self.get_aggregate_key(),
+            aggregate_id=self.entity.aggregate_id,
+            version=self.get_version(),
             event_type=self.event_name,
             attrs=attrs
         )
@@ -60,10 +56,8 @@ class CreateEvent(BaseEvent):
         self.entity.aggregate_id = aggregate_id
         return super(CreateEvent, self).save(attrs)
 
-    def get_aggregate_key(self):
-        return '%s:%s' % (
-            self.entity.aggregate_id, self.entity.INITIAL_VERSION
-        )
+    def get_version(self):
+        return self.entity.INITIAL_VERSION
 
 
 class DeleteEvent(BaseEvent):

@@ -27,3 +27,14 @@ class Item(Entity):
     colors_added = events.ColorsAdded()
     created = events.ItemCreated()
     deleted = events.Deleted()
+
+    @property
+    def price(self):
+        try:
+            return self.current_state['price']
+        except KeyError:
+            raise AttributeError()
+
+    @price.setter
+    def price(self, value):
+        self.price_updated.save(attrs={'price': value})

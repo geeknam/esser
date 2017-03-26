@@ -19,6 +19,13 @@ class EntityTestCase(unittest.TestCase):
     def test_aggregate_name(self):
         self.assertEquals(self.item.aggregate_name, 'Item')
 
+    def test_set_price(self):
+        self.item.created.save(
+            attrs={'name': 'Yummy Choc', 'price': 10.50}
+        )
+        self.item.price = 12.50
+        self.assertEquals(self.item.price, 12.50)
+
     def test_get_events(self):
         with patch('uuid.uuid4') as mock_uuid:
             mock_uuid.return_value = '2-higher'
@@ -32,7 +39,7 @@ class EntityTestCase(unittest.TestCase):
             Item().created.save(
                 attrs={'name': 'Donut', 'price': 5.50}
             )
-        self.assertEquals(event.guid, '2-higher')
+        self.assertEquals(event.aggregate_id, '2-higher')
         self.assertEquals(
             self.item.get_state_at(version=2),
             {'name': 'Yummy Choc', 'price': 12.50, 'latest_version': 2}

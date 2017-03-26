@@ -29,7 +29,7 @@ class HandlerTestCase(unittest.TestCase):
             }
         }
         result = handle_event(event, {})
-        self.assertEquals(result.aggregate_id, 'mykey:1')
+        self.assertEquals(result.aggregate_key, 'mykey:1')
         event = {
             'EventName': 'PriceUpdated',
             'AggregateId': 'mykey',
@@ -37,4 +37,4 @@ class HandlerTestCase(unittest.TestCase):
             'Payload': {'price': 12.0}
         }
         result = handle_event(event, {})
-        self.assertEquals(result.aggregate_id, 'mykey:2')
+        self.assertEquals(result.aggregate_key, 'mykey:2')
