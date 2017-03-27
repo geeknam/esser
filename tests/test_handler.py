@@ -1,7 +1,7 @@
 import unittest
 from mock import patch
 from esser.handlers import handle_event
-from esser.models import Event
+from esser.repositories.models import Event
 from examples.items.aggregate import Item
 
 
@@ -22,7 +22,7 @@ class HandlerTestCase(unittest.TestCase):
         event = {
             'EventName': 'ItemCreated',
             'AggregateId': None,
-            'AggregateClassPath': 'examples.items.aggregate.Item',
+            'AggregateName': 'Item',
             'Payload': {
                 'name': 'Handler Item',
                 'price': 15.0
@@ -33,7 +33,7 @@ class HandlerTestCase(unittest.TestCase):
         event = {
             'EventName': 'PriceUpdated',
             'AggregateId': 'mykey',
-            'AggregateClassPath': 'examples.items.aggregate.Item',
+            'AggregateName': 'Item',
             'Payload': {'price': 12.0}
         }
         result = handle_event(event, {})

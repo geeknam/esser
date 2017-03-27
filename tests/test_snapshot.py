@@ -1,6 +1,6 @@
 import unittest
 
-from esser.models import Event, Snapshot
+from esser.repositories.models import Event, Snapshot
 from examples.items.aggregate import Item
 
 

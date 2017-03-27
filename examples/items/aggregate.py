@@ -1,5 +1,6 @@
 from esser.entities import Entity
 from esser.reducer import BaseReducer
+from esser.registry import register
 from examples.items import events
 
 
@@ -20,6 +21,7 @@ class ItemReducer(BaseReducer):
         return aggregate
 
 
+@register
 class Item(Entity):
 
     reducer = ItemReducer()

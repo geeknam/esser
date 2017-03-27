@@ -1,7 +1,7 @@
 import unittest
 import mock
 
-from esser.models import Event
+from esser.repositories.models import Event
 from esser import exceptions
 
 from examples.items.aggregate import Item

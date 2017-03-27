@@ -2,7 +2,6 @@ from datetime import datetime
 from pynamodb.exceptions import PutError
 
 from esser.constants import AGGREGATE_KEY_DELIMITER
-from esser.models import Event
 from esser.exceptions import AggregateDoesNotExist, IntegrityError
 
 
@@ -12,7 +11,7 @@ class ReadMixin(object):
         """
         Get all events up to specific version
         """
-        return Event.query(
+        return self.model.query(
             self.aggregate.aggregate_name,
             aggregate_key__le='%s:%s' % (
                 self.aggregate.aggregate_id, version
@@ -23,13 +22,13 @@ class ReadMixin(object):
         """
         Get all events up to latest version
         """
-        return Event.query(
+        return self.model.query(
             self.aggregate.aggregate_name,
             aggregate_key__begins_with=self.aggregate.aggregate_id
         )
 
     def get_last_event(self):
-        events = list(Event.query(
+        events = list(self.model.query(
             self.aggregate.aggregate_name,
             aggregate_key__begins_with=self.aggregate.aggregate_id,
             limit=1, scan_index_forward=False
@@ -56,7 +55,7 @@ class WriteMixin(object):
         aggregate_key = self.__class__.get_aggregate_key(
             aggregate_id, version
         )
-        event = Event(
+        event = self.model(
             aggregate_name=self.aggregate.aggregate_name,
             aggregate_key=aggregate_key,
             event_type=event_type,

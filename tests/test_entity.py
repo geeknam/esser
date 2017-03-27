@@ -1,6 +1,6 @@
 import unittest
 from mock import patch
-from esser.models import Event
+from esser.repositories.models import Event
 from esser.exceptions import AggregateDoesNotExist
 from examples.items.aggregate import Item
 

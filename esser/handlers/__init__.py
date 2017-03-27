@@ -1,12 +1,14 @@
 import importlib
+from esser.registry import registry
 
 
 def handle_event(event, context):
     event_name = event['EventName']
     aggregate_id = event.get('AggregateId', None)
-    module, function = event['AggregateClassPath'].rsplit('.', 1)
+    path = registry.get_path(event['AggregateName'])
+    module, class_name = path.rsplit('.', 1)
     app_module = importlib.import_module(module)
-    aggregate_class = getattr(app_module, function)
+    aggregate_class = getattr(app_module, class_name)
     aggregate = aggregate_class(
         aggregate_id=aggregate_id
     )
