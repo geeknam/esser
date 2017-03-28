@@ -35,3 +35,6 @@ deploy:
       branch: master
       tags: true
 
+addons:
+  code_climate:
+    repo_token: c8d563dc62945055087c7099e1a6383949c5b4b39ab6319406e0bc3139ba8acf
