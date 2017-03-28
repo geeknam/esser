@@ -3,6 +3,7 @@
 mock
 nose
 coveralls
+codeclimate-test-reporter
 sphinx
 sphinx-autobuild
 travis-sphinx
