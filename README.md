@@ -6,7 +6,7 @@ esser - [E]vent [S]ourcing [Ser]verlessly
 [![Build Status](https://travis-ci.org/geeknam/esser.svg?branch=master)](https://travis-ci.org/geeknam/esser)
 [![Coverage Status](https://coveralls.io/repos/github/geeknam/esser/badge.svg?branch=master)](https://coveralls.io/github/geeknam/esser?branch=master)
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/2644f358dc5246da951352fb0550f84f/badge.svg)](https://www.quantifiedcode.com/app/project/2644f358dc5246da951352fb0550f84f)
-[![Join the chat at https://gitter.im/esser-chat/Lobby](https://badges.gitter.im/esser-chat/Lobby.svg)](https://gitter.im/esser-chat/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Slack](https://img.shields.io/badge/chat-slack-ff69b4.svg)](https://esser-py.slack.com/)
 
 
 - Serverless + Pay-As-You-Go

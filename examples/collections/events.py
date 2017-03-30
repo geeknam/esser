@@ -32,3 +32,12 @@ class ItemAddedWithExistanceValidation(BaseEvent):
     @property
     def event_name(self):
         return 'ItemAdded'
+
+
+class ItemAddedWithProjection(BaseEvent):
+
+    related_aggregate = Item
+
+    schema = {
+        'aggregate_id': {'coerce': 'project'}
+    }

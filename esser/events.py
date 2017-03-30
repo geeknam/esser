@@ -44,7 +44,8 @@ class BaseEvent(object):
             raise EventValidationException(
                 errors=self.validator.errors
             )
-        return self.persist(attrs)
+        normalized = self.validator.normalized(attrs)
+        return self.persist(normalized)
 
 
 class CreateEvent(BaseEvent):

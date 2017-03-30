@@ -14,6 +14,10 @@ class CollectionReducer(BaseReducer):
         aggregate['items'].append(item.current_state)
         return aggregate
 
+    def on_item_added_with_projection(self, aggregate, next_event):
+        aggregate['items'].append(next_event.event_data['aggregate_id'])
+        return aggregate
+
 
 class Collection(Entity):
     """
@@ -23,6 +27,7 @@ class Collection(Entity):
     created = events.CollectionCreated()
     item_added = events.ItemAdded()
     item_added_with_validation = events.ItemAddedWithExistanceValidation()
+    item_added_with_projection = events.ItemAddedWithProjection()
 
     def get_initial_state(self):
         return {

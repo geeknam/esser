@@ -26,13 +26,9 @@ Repositories
     :members:
     :undoc-members:
 
-Data Persistence
------------------------
-
-.. automodule:: esser.models
+.. automodule:: esser.repositories.models
     :members:
     :undoc-members:
-
 
 Events
 -----------------------

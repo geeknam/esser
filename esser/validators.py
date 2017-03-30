@@ -21,10 +21,16 @@ class EsserValidator(Validator):
 
     def _validate_aggregate_exists(self, aggregate_exists, field, value):
         if aggregate_exists and field == 'aggregate_id':
-            related_aggregate = self.event.related_aggregate(aggregate_id=value)
+            related_aggregate = self.event.related_aggregate(
+                aggregate_id=value
+            )
             state = related_aggregate.current_state
             if not state:
                 self._error(
                     field,
                     "aggregate for id %s does not exist" % value
                 )
+
+    def _normalize_coerce_project(self, value):
+        related_aggregate = self.event.related_aggregate(aggregate_id=value)
+        return related_aggregate.current_state

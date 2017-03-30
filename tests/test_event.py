@@ -79,10 +79,7 @@ class EventTestCase(unittest.TestCase):
     def test_composition(self):
         self.collection.created.save(attrs={'name': 'Favorite Food'})
         event = self.item.created.save(
-            attrs={
-                'name': 'Yummy Choc',
-                'price': 10.50
-            }
+            attrs={'name': 'Yummy Choc', 'price': 10.50}
         )
         self.collection.item_added.save(
             attrs={'aggregate_id': event.aggregate_id}
@@ -109,3 +106,22 @@ class EventTestCase(unittest.TestCase):
             self.collection.item_added_with_validation.save(
                 attrs={'aggregate_id': 'incorrectid'}
             )
+
+    def test_coerce_projection(self):
+        self.collection.created.save(attrs={'name': 'Favorite Food'})
+        event = self.item.created.save(
+            attrs={'name': 'Yummy Choc', 'price': 10.50}
+        )
+        self.collection.item_added_with_projection.save(
+            attrs={'aggregate_id': event.aggregate_id}
+        )
+        self.assertEquals(
+            self.collection.current_state,
+            {
+                'items': [
+                    {'latest_version': 1, 'name': 'Yummy Choc', 'price': 10.5}
+                ],
+                'latest_version': 2,
+                'name': 'Favorite Food'
+            }
+        )
