@@ -16,6 +16,7 @@ Parameters:
   TableName:
     Description: Dynamodb Table Name
     Type: String
+    Default: events
   DynamoDBResourceNameExportName:
     Description: Export name for Table resource name
     Type: String
@@ -27,7 +28,7 @@ Parameters:
 
 
 Resources:
-  DynamoDBTable:
+  EsserEventDynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref TableName
@@ -50,11 +51,11 @@ Resources:
 Outputs:
   DynamoDBResourceName:
     Description: Resource name of DyanmoDB Table
-    Value: !Ref DynamoDBTable
+    Value: !Ref EsserEventDynamoDBTable
     Export:
       Name: !Ref DynamoDBResourceNameExportName
   DynamoDBStreamArn:
     Description: Stream ARN of DyanmoDB Table
-    Value: !GetAtt DynamoDBTable.StreamArn
+    Value: !GetAtt EsserEventDynamoDBTable.StreamArn
     Export:
       Name: !Ref DynamoDBStreamArnExportName

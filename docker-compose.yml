@@ -14,7 +14,7 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_REGION: ap-southeast-2
-      PYTHONPATH: /code
+      PYTHONPATH: /code:/code/examples
       DYNAMODB_HOST: http://dynamodb:8000
       CODECLIMATE_REPO_TOKEN: ${CODECLIMATE_REPO_TOKEN}
       COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
