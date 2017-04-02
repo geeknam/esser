@@ -1,0 +1,60 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: DynamoDB Table storing events
+
+Parameters:
+  ReadCapacityUnits:
+    Description: Read capacity unit
+    Type: Number
+    Default: 1
+    MinValue: 1
+  WriteCapacityUnits:
+    Description: Write capacity unit
+    Type: Number
+    Default: 1
+    MinValue: 1
+  TableName:
+    Description: Dynamodb Table Name
+    Type: String
+  DynamoDBResourceNameExportName:
+    Description: Export name for Table resource name
+    Type: String
+    Default: DynamoDBEventTable
+  DynamoDBStreamArnExportName:
+    Description: Export name for DynamoDB Stream Arn
+    Type: String
+    Default: DynamoDBEventStreamArn
+
+
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TableName
+      AttributeDefinitions: 
+        - AttributeName: aggregate_name
+          AttributeType: S
+        - AttributeName: aggregate_key
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: aggregate_name
+          KeyType: HASH
+        - AttributeName: aggregate_key
+          KeyType: RANGE
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref ReadCapacityUnits
+        WriteCapacityUnits: !Ref WriteCapacityUnits
+      StreamSpecification:
+        StreamViewType: KEYS_ONLY
+
+Outputs:
+  DynamoDBResourceName:
+    Description: Resource name of DyanmoDB Table
+    Value: !Ref DynamoDBTable
+    Export:
+      Name: !Ref DynamoDBResourceNameExportName
+  DynamoDBStreamArn:
+    Description: Stream ARN of DyanmoDB Table
+    Value: !GetAtt DynamoDBTable.StreamArn
+    Export:
+      Name: !Ref DynamoDBStreamArnExportName

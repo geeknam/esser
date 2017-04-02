@@ -1,9 +1,17 @@
 
 from setuptools import setup
 
+packages = [
+    'esser',
+    'esser.contrib',
+    'esser.handlers',
+    'esser.infra',
+    'esser.repositories'
+]
+
 setup(
     name='esser',
-    packages=['esser'],
+    packages=packages,
     license='Apache 2.0',
     version='0.1.1',
     description='Python Event Sourcing framework',

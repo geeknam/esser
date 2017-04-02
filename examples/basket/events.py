@@ -1,10 +1,10 @@
 from esser.events import (
     BaseEvent, CreateEvent
 )
-from examples.items.aggregate import Item
+from items.aggregate import Item
 
 
-class CollectionCreated(CreateEvent):
+class BasketCreated(CreateEvent):
 
     schema = {
         'name': {'type': 'string'}

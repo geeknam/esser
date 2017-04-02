@@ -1,12 +1,12 @@
 from esser.entities import Entity
 from esser.reducer import BaseReducer
-from examples.collections import events
-from examples.items.aggregate import Item
+from basket import events
+from items.aggregate import Item
 
 
-class CollectionReducer(BaseReducer):
+class BasketReducer(BaseReducer):
 
-    def on_collection_created(self, aggregate, next_event):
+    def on_basket_created(self, aggregate, next_event):
         return self.on_created(aggregate, next_event)
 
     def on_item_added(self, aggregate, next_event):
@@ -19,12 +19,12 @@ class CollectionReducer(BaseReducer):
         return aggregate
 
 
-class Collection(Entity):
+class Basket(Entity):
     """
-    Collection is an Aggregate root
+    Basket is an Aggregate root
     """
-    reducer = CollectionReducer()
-    created = events.CollectionCreated()
+    reducer = BasketReducer()
+    created = events.BasketCreated()
     item_added = events.ItemAdded()
     item_added_with_validation = events.ItemAddedWithExistanceValidation()
     item_added_with_projection = events.ItemAddedWithProjection()

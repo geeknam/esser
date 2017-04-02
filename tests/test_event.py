@@ -5,7 +5,7 @@ from esser.repositories.models import Event
 from esser import exceptions
 
 from examples.items.aggregate import Item
-from examples.collections.aggregate import Collection
+from examples.basket.aggregate import Basket
 
 
 class EventTestCase(unittest.TestCase):
@@ -15,7 +15,7 @@ class EventTestCase(unittest.TestCase):
             read_capacity_units=1, write_capacity_units=1
         )
         self.item = Item()
-        self.collection = Collection()
+        self.basket = Basket()
 
     def tearDown(self):
         Event.delete_table()
@@ -77,15 +77,15 @@ class EventTestCase(unittest.TestCase):
             )
 
     def test_composition(self):
-        self.collection.created.save(attrs={'name': 'Favorite Food'})
+        self.basket.created.save(attrs={'name': 'Favorite Food'})
         event = self.item.created.save(
             attrs={'name': 'Yummy Choc', 'price': 10.50}
         )
-        self.collection.item_added.save(
+        self.basket.item_added.save(
             attrs={'aggregate_id': event.aggregate_id}
         )
         self.assertEquals(
-            self.collection.current_state,
+            self.basket.current_state,
             {
                 'items': [
                     {'latest_version': 1, 'name': 'Yummy Choc', 'price': 10.5}
@@ -96,27 +96,27 @@ class EventTestCase(unittest.TestCase):
         )
 
     def test_composition_invalid_id(self):
-        self.collection.created.save(attrs={'name': 'Favorite Food'})
-        self.collection.item_added.save(attrs={'aggregate_id': 'incorrectid'})
+        self.basket.created.save(attrs={'name': 'Favorite Food'})
+        self.basket.item_added.save(attrs={'aggregate_id': 'incorrectid'})
         self.assertEquals(
-            self.collection.current_state,
+            self.basket.current_state,
             {'items': [{}], 'latest_version': 2, u'name': u'Favorite Food'}
         )
         with self.assertRaises(exceptions.EventValidationException):
-            self.collection.item_added_with_validation.save(
+            self.basket.item_added_with_validation.save(
                 attrs={'aggregate_id': 'incorrectid'}
             )
 
     def test_coerce_projection(self):
-        self.collection.created.save(attrs={'name': 'Favorite Food'})
+        self.basket.created.save(attrs={'name': 'Favorite Food'})
         event = self.item.created.save(
             attrs={'name': 'Yummy Choc', 'price': 10.50}
         )
-        self.collection.item_added_with_projection.save(
+        self.basket.item_added_with_projection.save(
             attrs={'aggregate_id': event.aggregate_id}
         )
         self.assertEquals(
-            self.collection.current_state,
+            self.basket.current_state,
             {
                 'items': [
                     {'latest_version': 1, 'name': 'Yummy Choc', 'price': 10.5}
