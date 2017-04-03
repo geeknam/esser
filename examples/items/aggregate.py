@@ -2,6 +2,7 @@ from esser.entities import Entity
 from esser.reducer import BaseReducer
 from esser.registry import register
 from items import events
+from items import receivers
 
 
 class ItemReducer(BaseReducer):

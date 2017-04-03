@@ -1,6 +1,6 @@
 from esser.validators import EsserValidator
-from esser.constants import AGGREGATE_KEY_DELIMITER
 from esser.exceptions import EventValidationException
+from esser.signals import event_pre_save
 
 
 class BaseEvent(object):
@@ -31,9 +31,19 @@ class BaseEvent(object):
         setattr(self.validator, 'aggregate', entity)
 
     def persist(self, attrs):
+        event_version = self.get_version()
+        # dispatch the signal before persisting
+        event_pre_save.send(
+            sender=self.__class__,
+            aggregate_name=self.entity.aggregate_name,
+            aggregate_id=self.entity.aggregate_id,
+            event_name=self.event_name,
+            version=event_version,
+            payload=attrs,
+        )
         return self.entity.repository.persist(
             aggregate_id=self.entity.aggregate_id,
-            version=self.get_version(),
+            version=event_version,
             event_type=self.event_name,
             attrs=attrs
         )
