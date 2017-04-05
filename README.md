@@ -14,28 +14,12 @@ esser - [E]vent [S]ourcing [Ser]verlessly
 - Snapshots
 - Projections
 
-Runtime
+[![Esser Diagram]( https://cloud.githubusercontent.com/assets/199628/24705037/6cbf50b0-1a4d-11e7-99d5-7ad32295912c.png)]
+
+Components
 -----------------
 
-- AWS Lambda Python
-
-
-Event Store
------------------
-
-The primary data store used for writes is `DynamoDB`
-Snapshoting can be achieved via `DynamoDB` streams
-
-Query Store
------------------
-
-Aggregates should be queried using a different store.
-Available strategies for storing materialsed views:
-
-- PostgreSQL
-- Elasticsearch
-- Redis
-
-AWS Lambda can pull changes from DynamoDB stream and update the
-query models.
-
+- Runtime: AWS Lambda (Python)
+- Append Only Event Store: DynamoDB
+- Event Source Triggers: DynamoDB Stream
+- Read / Query Store: PostgreSQL / Elasticsearch (contrib)
