@@ -1,8 +1,7 @@
 import uuid
 
 from esser.events import BaseEvent
-from esser.constants import AGGREGATE_KEY_DELIMITER
-from esser.repositories.base import DynamoDBRepository
+from esser.repositories.dynamodb import DynamoDBRepository
 from esser.utils import cached_property
 
 

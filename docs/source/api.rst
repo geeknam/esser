@@ -16,17 +16,19 @@ Entities / Aggregates
     :undoc-members:
 
 Repositories
------------------------
+==================
 
-.. automodule:: esser.repositories.mixins
-    :members:
-    :undoc-members:
+Base Interface
+------------------
 
 .. automodule:: esser.repositories.base
     :members:
     :undoc-members:
 
-.. automodule:: esser.repositories.models
+DynamoDB
+-----------------
+
+.. automodule:: esser.repositories.dynamodb
     :members:
     :undoc-members:
 

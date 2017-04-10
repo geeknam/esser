@@ -1,5 +1,4 @@
 import re
-from esser.constants import AGGREGATE_KEY_DELIMITER
 from esser.exceptions import AggregateDeleted
 
 re_camel_case = re.compile(r'(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))')
@@ -28,11 +27,11 @@ class BaseReducer(object):
         return aggregate
 
     def on_created(self, aggregate, next_event):
-        aggregate.update(next_event.event_data.as_dict())
+        aggregate.update(next_event.event_data)
         return aggregate
 
     def on_updated(self, aggregate, next_event):
-        aggregate.update(next_event.event_data.as_dict())
+        aggregate.update(next_event.event_data)
         return aggregate
 
     def on_deleted(self, aggregate, next_event):

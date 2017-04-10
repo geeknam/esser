@@ -8,7 +8,7 @@ from pynamodb.attributes import (
 from esser.constants import AGGREGATE_KEY_DELIMITER
 
 
-class Event(Model):
+class DynamoDBEventModel(Model):
     """
     A DynamoDB Event model
     """
