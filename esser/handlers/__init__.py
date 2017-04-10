@@ -48,7 +48,7 @@ class LambdaHandler(object):
         return aggregates
 
 
-handler = LambdaHandler()
+default_handler = LambdaHandler()
 
-handle_event = handler.handle_event
-handle_stream = handler.handle_stream
+handle_event = default_handler.handle_event
+handle_stream = default_handler.handle_stream

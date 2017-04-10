@@ -3,6 +3,7 @@ from setuptools import setup
 
 packages = [
     'esser',
+    'esser.cli',
     'esser.contrib',
     'esser.handlers',
     'esser.infra',
@@ -23,5 +24,10 @@ setup(
         'event sourcing', 'framework', 'esser', 'serverless',
         'dynamodb', 'lambda'
     ],
-    install_requires=['pynamodb', 'cerberus']
+    install_requires=['pynamodb', 'cerberus'],
+    entry_points={
+        'console_scripts': [
+            'esser = esser.cli.run:main'
+        ]
+    },
 )
