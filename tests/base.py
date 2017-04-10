@@ -1,5 +1,5 @@
 import unittest
-from esser.repositories.models import DynamoDBEventModel, Snapshot
+from esser.repositories.dynamodb.models import DynamoDBEventModel, Snapshot
 
 
 class BaseTestCase(unittest.TestCase):

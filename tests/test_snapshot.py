@@ -1,5 +1,5 @@
 from tests.base import BaseTestCase
-from esser.repositories.models import Snapshot
+from esser.repositories.dynamodb.models import Snapshot
 from examples.items.aggregate import Item
 
 

@@ -13,7 +13,7 @@ class DynamoDBEventModel(Model):
     A DynamoDB Event model
     """
     class Meta:
-        region = os.environ['AWS_REGION']
+        region = os.environ.get('AWS_REGION', 'ap-southeast-2')
         table_name = os.environ.get("EVENT_TABLE", "events")
         host = os.environ.get('DYNAMODB_HOST', None)
     aggregate_name = UnicodeAttribute(hash_key=True)
