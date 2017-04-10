@@ -1,20 +1,14 @@
-import unittest
 from mock import patch
-from esser.repositories.models import Event
 from esser.exceptions import AggregateDoesNotExist
 from examples.items.aggregate import Item
+from tests.base import BaseTestCase
 
 
-class EntityTestCase(unittest.TestCase):
+class EntityTestCase(BaseTestCase):
 
     def setUp(self):
-        Event.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
+        super(EntityTestCase, self).setUp()
         self.item = Item()
-
-    def tearDown(self):
-        Event.delete_table()
 
     def test_aggregate_name(self):
         self.assertEquals(self.item.aggregate_name, 'Item')

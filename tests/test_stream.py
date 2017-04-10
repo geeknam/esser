@@ -1,16 +1,13 @@
-import unittest
 from mock import patch
-from esser.repositories.models import Event
+from tests.base import BaseTestCase
 from examples.items.aggregate import Item
 from esser.handlers import handle_stream
 
 
-class StreamTestCase(unittest.TestCase):
+class StreamTestCase(BaseTestCase):
 
     def setUp(self):
-        Event.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
+        super(StreamTestCase, self).setUp()
         self.item = Item()
 
     def stream_factory(self, aggregate_name, aggregate_key):

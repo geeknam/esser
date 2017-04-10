@@ -1,24 +1,18 @@
-import unittest
 import mock
 
-from esser.repositories.models import Event
+from tests.base import BaseTestCase
 from esser import exceptions
 
 from examples.items.aggregate import Item
 from examples.basket.aggregate import Basket
 
 
-class EventTestCase(unittest.TestCase):
+class EventTestCase(BaseTestCase):
 
     def setUp(self):
-        Event.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
+        super(EventTestCase, self).setUp()
         self.item = Item()
         self.basket = Basket()
-
-    def tearDown(self):
-        Event.delete_table()
 
     def test_create(self):
         self.item.created.save(

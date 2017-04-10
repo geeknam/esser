@@ -1,20 +1,14 @@
-import unittest
 from mock import patch
+from tests.base import BaseTestCase
 from esser.handlers import handle_event
-from esser.repositories.models import Event
 from examples.items.aggregate import Item
 
 
-class HandlerTestCase(unittest.TestCase):
+class HandlerTestCase(BaseTestCase):
 
     def setUp(self):
-        Event.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
+        super(HandlerTestCase, self).setUp()
         self.item = Item()
-
-    def tearDown(self):
-        Event.delete_table()
 
     @patch('uuid.uuid4')
     def test_handler(self, mock_uuid):
@@ -29,7 +23,8 @@ class HandlerTestCase(unittest.TestCase):
             }
         }
         result = handle_event(event, {})
-        self.assertEquals(result.aggregate_key, 'mykey:1')
+        self.assertEquals(result.aggregate_id, 'mykey')
+        self.assertEquals(result.version, 1)
         event = {
             'EventName': 'PriceUpdated',
             'AggregateId': 'mykey',
@@ -37,4 +32,5 @@ class HandlerTestCase(unittest.TestCase):
             'Payload': {'price': 12.0}
         }
         result = handle_event(event, {})
-        self.assertEquals(result.aggregate_key, 'mykey:2')
+        self.assertEquals(result.aggregate_id, 'mykey')
+        self.assertEquals(result.version, 2)

@@ -1,23 +1,13 @@
-import unittest
-
-from esser.repositories.models import Event, Snapshot
+from tests.base import BaseTestCase
+from esser.repositories.models import Snapshot
 from examples.items.aggregate import Item
 
 
-class SnapshotTestCase(unittest.TestCase):
+class SnapshotTestCase(BaseTestCase):
 
     def setUp(self):
-        Event.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
-        Snapshot.create_table(
-            read_capacity_units=1, write_capacity_units=1
-        )
+        super(SnapshotTestCase, self).setUp()
         self.item = Item()
-
-    def tearDown(self):
-        Event.delete_table()
-        Snapshot.delete_table()
 
     def test_from_aggregate(self):
         self.item.created.save(
