@@ -25,18 +25,57 @@ class BaseRepository(object):
         self.aggregate = aggregate
 
     def to_event(self, obj):
+        """
+        :return: Event object
+        :rtype: esser.repositories.base.Event
+        """
         raise NotImplementedError(
             'Repository interface needs to implement to_event() method'
         )
 
     def get_events(self, version):
+        """
+        :param version: version of event from which to start
+        :type version: int
+        :return: Iterable (list, generator) of Event objects
+        :rtype: iterable of esser.repositories.base.Event
+
+        Return an iterable set of Event objects
+        Available context: `self.aggregate`
+        """
         raise NotImplementedError()
 
     def get_all_events(self):
+        """
+        :return: Iterable (list, generator) of Event objects
+        :rtype: iterable of esser.repositories.base.Event
+
+        Returns all events of current aggregate
+        """
         raise NotImplementedError()
 
     def get_last_event(self):
+        """
+        :return: Event object
+        :rtype: esser.repositories.base.Event
+
+        Should return an Event object
+        """
         raise NotImplementedError()
 
     def persist(self, aggregate_id, version, event_type, attrs):
+        """
+        :param aggregate_id: unique id of an aggregate (uuid can be used)
+        :type aggregate_id: str
+        :param version: version of event from which to start
+        :type version: int
+        :param event_type: Type of event E.g: CartUpdated
+        :type event_type: str
+        :param attrs: Attributes or data of the event
+        :type attrs: dict
+        :return: Event object
+        :rtype: esser.repositories.base.Event
+
+        Should return an Event object
+        """
         raise NotImplementedError()
