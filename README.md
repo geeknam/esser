@@ -37,3 +37,100 @@ Components
 - Append Only Event Store: DynamoDB
 - Event Source Triggers: DynamoDB Stream
 - Read / Query Store: PostgreSQL / Elasticsearch (via contrib)
+
+Example Usage
+------------------
+
+#### Add first entity
+
+`items/aggregate.py`
+
+```python
+from esser.entities import Entity
+from esser.registry import register
+from items import commands
+from items import receivers
+from items.reducer import ItemReducer
+
+
+@register
+class Item(Entity):
+
+    reducer = ItemReducer()
+    created = commands.CreateItem()
+    price_updated = commands.UpdatePrice()
+
+```
+
+#### Add commands that can be issued
+
+`items/commands.py`
+
+```python
+from esser.commands import BaseCommand, CreateCommand
+
+
+class CreateItem(CreateCommand):
+
+    event_name = 'ItemCreated'
+    schema = {
+        'name': {'type': 'string'},
+        'price': {'type': 'float'}
+    }
+
+
+class UpdatePrice(BaseCommand):
+
+    event_name = 'PriceUpdated'
+    schema = {
+        'price': {'type': 'float', 'diff': True}
+    }
+```
+
+#### Add reducer to fold event stream
+
+`items/reducer.py`
+
+```python
+from esser.reducer import BaseReducer
+
+class ItemReducer(BaseReducer):
+
+    def on_item_created(self, aggregate, next_event):
+        return self.on_created(aggregate, next_event)
+
+    def on_price_updated(self, aggregate, next_event):
+        aggregate['price'] = next_event.event_data['price']
+        return aggregate
+
+```
+
+#### Subscribe to events
+
+`items/receivers.py`
+
+
+```python
+from esser.signals.decorators import receiver
+from esser.signals import event_pre_save, event_received, event_post_save
+from esser.handlers import LambdaHandler
+from items.commands import UpdatePrice
+
+
+@receiver(event_pre_save, sender=UpdatePrice)
+def presave_price_updated(sender, **kwargs):
+    # Do something before saving the event
+    pass
+
+
+@receiver(event_received, sender=LambdaHandler)
+def received_command(sender, **kwargs):
+    # when the command is received
+    pass
+
+@receiver(event_post_save)
+def handle_event_saved(sender, **kwargs):
+    # when the event has already been saved
+    pass
+
+```
