@@ -3,7 +3,7 @@ from datetime import datetime
 from pynamodb.models import Model
 from pynamodb.attributes import (
     UnicodeAttribute, UTCDateTimeAttribute,
-    MapAttribute
+    JSONAttribute, MapAttribute
 )
 from esser.constants import AGGREGATE_KEY_DELIMITER
 
@@ -20,7 +20,7 @@ class DynamoDBEventModel(Model):
     aggregate_key = UnicodeAttribute(range_key=True)
     event_type = UnicodeAttribute()
     created_at = UTCDateTimeAttribute()
-    event_data = MapAttribute()
+    event_data = JSONAttribute()
 
     @classmethod
     def _conditional_operator_check(cls, conditional_operator):

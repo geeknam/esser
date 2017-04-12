@@ -18,7 +18,7 @@ class DynamoDBRepository(BaseRepository):
             version=obj.version,
             event_type=obj.event_type,
             created_at=obj.created_at,
-            event_data=obj.event_data.as_dict()
+            event_data=obj.event_data
         )
 
     def get_events(self, version):

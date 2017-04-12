@@ -12,8 +12,5 @@ event_pre_save = dispatch.Signal(
 )
 
 event_post_save = dispatch.Signal(
-    providing_args=[
-        'aggregate_name', 'aggregate_id', 'payload',
-        'event_name', 'version',
-    ]
+    providing_args=['event']
 )

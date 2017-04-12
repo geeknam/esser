@@ -1,18 +1,14 @@
-
+from setuptools import find_packages
 from setuptools import setup
-
-packages = [
-    'esser',
-    'esser.cli',
-    'esser.contrib',
-    'esser.handlers',
-    'esser.infra',
-    'esser.repositories'
-]
 
 setup(
     name='esser',
-    packages=packages,
+    packages=find_packages(
+        exclude=[
+            'examples.*', 'examples', 'tests', 'requirements',
+            'docs'
+        ]
+    ),
     license='Apache 2.0',
     version='0.1.1',
     description='Python Event Sourcing framework',

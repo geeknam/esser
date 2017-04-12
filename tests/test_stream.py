@@ -28,6 +28,15 @@ class StreamTestCase(BaseTestCase):
                                 "S": aggregate_key
                             }
                         },
+                        'NewImage': {
+                            'created_at': {'S': '2017-04-12T06:56:06.191104+0000'},
+                            'aggregate_name': {'S': 'Item'},
+                            'aggregate_key': {'S': '83e7b629-58a0-4194-80e4-dab5dbbd63c1:1'},
+                            'event_type': {'S': 'ItemCreated'},
+                            'event_data': {
+                                'S': '{"price": 15, "name": "Coffee"}'
+                            }
+                        },
                         "SequenceNumber": "111",
                         "SizeBytes": 26,
                         "StreamViewType": "KEYS_ONLY"
@@ -37,26 +46,15 @@ class StreamTestCase(BaseTestCase):
             ]
         }
 
-    def test_handle_stream(self):
+    @patch('examples.items.receivers.handle_event_saved')
+    def test_handle_stream(self, mock_handle):
         with patch('uuid.uuid4') as mock_uuid:
             mock_uuid.return_value = 'mockuuid'
             self.item.created.save(
                 attrs={
-                    'name': 'Yummy Choc',
-                    'price': 10.50
+                    'name': 'Yummy Choc', 'price': 10.50
                 }
             )
         event = self.item.price_updated.save(attrs={'price': 12.50})
         stream = self.stream_factory('Item', event.aggregate_key)
-        aggregates = handle_stream(stream, {})
-        self.assertEquals(
-            aggregates,
-            {
-                'Item': {
-                    'mockuuid': {
-                        'name': 'Yummy Choc', 'price': 12.50,
-                        'latest_version': 2
-                    }
-                }
-            }
-        )
+        handle_stream(stream, {})

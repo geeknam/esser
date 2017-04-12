@@ -1,48 +1,48 @@
 import importlib
-from collections import defaultdict
+import json
 from esser.signals import event_received, event_post_save
 from esser.registry import registry
 from esser.repositories.base import Event
 
 
-def get_aggregate(aggregate_name, aggregate_id):
-    """Given an aggregate name and id return Aggregate instance
-
-    Args:
-        aggregate_name (str): Aggregate Name
-        aggregate_id (str): Aggregate ID
-
-    Returns:
-        esser.entities.Entity: aggregate / entity
-    """
-    path = registry.get_path(aggregate_name)
-    module, class_name = path.rsplit('.', 1)
-    app_module = importlib.import_module(module)
-    aggregate_class = getattr(app_module, class_name)
-    aggregate = aggregate_class(
-        aggregate_id=aggregate_id
-    )
-    return aggregate
-
-
-def image_to_event(image):
-    aggregate_id, version = image['aggregate_key']['S'].split(':')
-    return Event(
-        aggregate_name=image['aggregate_name']['S'],
-        aggregate_id=aggregate_id,
-        version=version,
-        event_type=image['event_type']['S'],
-        created_at=image['created_at']['S'],
-        event_data=image['event_data']['M'],
-    )
-
-
 class LambdaHandler(object):
+
+    @staticmethod
+    def get_aggregate(aggregate_name, aggregate_id):
+        """Given an aggregate name and id return Aggregate instance
+
+        Args:
+            aggregate_name (str): Aggregate Name
+            aggregate_id (str): Aggregate ID
+
+        Returns:
+            esser.entities.Entity: aggregate / entity
+        """
+        path = registry.get_path(aggregate_name)
+        module, class_name = path.rsplit('.', 1)
+        app_module = importlib.import_module(module)
+        aggregate_class = getattr(app_module, class_name)
+        aggregate = aggregate_class(
+            aggregate_id=aggregate_id
+        )
+        return aggregate
+
+    @staticmethod
+    def image_to_event(image):
+        aggregate_id, version = image['aggregate_key']['S'].split(':')
+        return Event(
+            aggregate_name=image['aggregate_name']['S'],
+            aggregate_id=aggregate_id,
+            version=version,
+            event_type=image['event_type']['S'],
+            created_at=image['created_at']['S'],
+            event_data=json.loads(image['event_data']['S']),
+        )
 
     def handle_event(self, event, context):
         event_name = event['EventName']
         aggregate_id = event.get('AggregateId', None)
-        aggregate = get_aggregate(event['AggregateName'], aggregate_id)
+        aggregate = self.get_aggregate(event['AggregateName'], aggregate_id)
         event_received.send(
             sender=self.__class__,
             aggregate_name=event['AggregateName'],
@@ -59,25 +59,18 @@ class LambdaHandler(object):
         return
 
     def handle_stream(self, event, context):
-        aggregates = defaultdict(dict)
         for record in event['Records']:
             keys = record['dynamodb']['Keys']
-            # new_image = record['dynamodb']['NewImage']
+            new_image = record['dynamodb']['NewImage']
             aggregate_name = keys['aggregate_name']['S']
             aggregate_key = keys['aggregate_key']['S']
             aggregate_id = aggregate_key.split(':')[0]
-            aggregate = get_aggregate(aggregate_name, aggregate_id)
-            # event_post_save.send(
-            #     sender=aggregate.__class__,
-            #     aggregate=aggregate,
-            #     aggregate_name=aggregate.aggregate_name,
-            #     aggregate_id=aggregate.aggregate_id,
-            #     event_name=self.event_name,
-            #     version=event_version,
-            #     payload=attrs,
-            # )
-            aggregates[aggregate_name][aggregate_id] = aggregate.current_state
-        return aggregates
+            aggregate = self.get_aggregate(aggregate_name, aggregate_id)
+            event_obj = self.image_to_event(new_image)
+            event_post_save.send(
+                sender=aggregate.__class__,
+                event=event_obj
+            )
 
 
 default_handler = LambdaHandler()
