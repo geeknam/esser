@@ -1,7 +1,7 @@
 template_path: templates/dynamodb.yaml
 parameters:
   TableName: !environment_variable EventTableName
-  ReadCapacityUnits: 1
-  WriteCapacityUnits: 1
+  ReadCapacityUnits: "1"
+  WriteCapacityUnits: "1"
   DynamoDBResourceNameExportName: DynamoDBEventTable
   DynamoDBStreamArnExportName: DynamoDBEventStreamArn

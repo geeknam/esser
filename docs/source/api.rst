@@ -35,15 +35,15 @@ DynamoDB
 Events
 -----------------------
 
-.. autoclass:: esser.events.BaseEvent
+.. autoclass:: esser.commands.BaseCommand
     :members:
     :undoc-members:
 
-.. autoclass:: esser.events.CreateEvent
+.. autoclass:: esser.commands.CreateCommand
     :members:
     :undoc-members:
 
-.. autoclass:: esser.events.DeleteEvent
+.. autoclass:: esser.commands.DeleteCommand
     :members:
     :undoc-members:
 

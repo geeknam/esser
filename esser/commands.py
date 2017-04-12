@@ -3,14 +3,14 @@ from esser.exceptions import EventValidationException
 from esser.signals import event_pre_save
 
 
-class BaseEvent(object):
-    """Base Event class."""
+class BaseCommand(object):
+    """Base Command class."""
 
     def __init__(self):
         """
         Initialise the validator for the event based on schema.
 
-        A valid Event class should have Event.schema
+        A valid Command class should have Command.schema
         """
         self.validator = EsserValidator(
             self.schema, event=self
@@ -18,7 +18,11 @@ class BaseEvent(object):
 
     @property
     def event_name(self):
-        """Event name by default is the class name."""
+        raise NotImplementedError('Implement event_name property')
+
+    @property
+    def command_name(self):
+        """Command name by default is the class name."""
         return self.__class__.__name__
 
     def get_version(self):
@@ -58,20 +62,20 @@ class BaseEvent(object):
         return self.persist(normalized)
 
 
-class CreateEvent(BaseEvent):
-    """Event for creating an entity."""
+class CreateCommand(BaseCommand):
+    """Command for creating an entity."""
 
     def save(self, attrs):
         """Generate aggregate id using uuid."""
         aggregate_id = self.entity.generate_new_guid()
         self.entity.aggregate_id = aggregate_id
-        return super(CreateEvent, self).save(attrs)
+        return super(CreateCommand, self).save(attrs)
 
     def get_version(self):
         return self.entity.INITIAL_VERSION
 
 
-class DeleteEvent(BaseEvent):
+class DeleteCommand(BaseCommand):
 
     @property
     def event_name(self):

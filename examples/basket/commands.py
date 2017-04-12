@@ -1,27 +1,29 @@
-from esser.events import (
-    BaseEvent, CreateEvent
+from esser.commands import (
+    BaseCommand, CreateCommand
 )
 from items.aggregate import Item
 
 
-class BasketCreated(CreateEvent):
+class CreateBasket(CreateCommand):
 
+    event_name = 'BasketCreated'
     schema = {
         'name': {'type': 'string'}
     }
 
 
-class ItemAdded(BaseEvent):
+class AddItem(BaseCommand):
 
+    event_name = 'ItemAdded'
     schema = {
         'aggregate_id': {'type': 'string'}
     }
 
 
-class ItemAddedWithExistanceValidation(BaseEvent):
+class AddItemWithExistanceValidation(BaseCommand):
 
+    event_name = 'ItemAdded'
     related_aggregate = Item
-
     schema = {
         'aggregate_id': {
             'type': 'string',
@@ -29,15 +31,11 @@ class ItemAddedWithExistanceValidation(BaseEvent):
         }
     }
 
-    @property
-    def event_name(self):
-        return 'ItemAdded'
 
+class AddItemWithProjection(BaseCommand):
 
-class ItemAddedWithProjection(BaseEvent):
-
+    event_name = 'ItemAddedWithProjection'
     related_aggregate = Item
-
     schema = {
         'aggregate_id': {'coerce': 'project'}
     }

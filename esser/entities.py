@@ -1,6 +1,6 @@
 import uuid
 
-from esser.events import BaseEvent
+from esser.commands import BaseCommand
 from esser.repositories.dynamodb import DynamoDBRepository
 from esser.utils import cached_property
 
@@ -20,9 +20,9 @@ class Entity(object):
         """
         self.aggregate_id = aggregate_id
         for name, value in self.__class__.__dict__.items():
-            if isinstance(value, BaseEvent):
+            if isinstance(value, BaseCommand):
                 value.attach_entity(self)
-        self.repository = DynamoDBRepository(aggregate=self)
+        self.repository = self.repository_class(aggregate=self)
 
     @property
     def aggregate_name(self):

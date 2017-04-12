@@ -1,23 +1,26 @@
-from esser.events import BaseEvent, CreateEvent, DeleteEvent
+from esser.commands import BaseCommand, CreateCommand, DeleteCommand
 
 
-class ItemCreated(CreateEvent):
+class CreateItem(CreateCommand):
 
+    event_name = 'ItemCreated'
     schema = {
         'name': {'type': 'string'},
         'price': {'type': 'float'}
     }
 
 
-class PriceUpdated(BaseEvent):
+class UpdatePrice(BaseCommand):
 
+    event_name = 'PriceUpdated'
     schema = {
         'price': {'type': 'float', 'diff': True}
     }
 
 
-class ColorsAdded(BaseEvent):
+class AddColors(BaseCommand):
 
+    event_name = 'ColorsAdded'
     schema = {
         'colors': {
             'type': 'set',
@@ -26,7 +29,7 @@ class ColorsAdded(BaseEvent):
     }
 
 
-class Deleted(DeleteEvent):
+class DeleteItem(DeleteCommand):
 
     schema = {
         'deleted_by': {'type': 'string'}

@@ -1,3 +1,5 @@
+import json
+
 
 class Event(object):
     """
@@ -17,6 +19,29 @@ class Event(object):
     @property
     def aggregate_key(self):
         return '%s:%s' % (self.aggregate_id, self.version)
+
+    def as_dict(self):
+        """Serialise event object to dictionary format
+
+        Returns:
+            dict: dict representing event
+        """
+        return {
+            'aggregate_name': self.aggregate_name,
+            'aggregate_id': self.aggregate_id,
+            'version': self.version,
+            'event_type': self.event_type,
+            'created_at': self.created_at,
+            'event_data': self.event_data,
+        }
+
+    def as_json(self):
+        """Serialise event object to JSON format
+
+        Returns:
+            str: JSON representing event
+        """
+        return json.dumps(self.as_dict())
 
 
 class BaseRepository(object):

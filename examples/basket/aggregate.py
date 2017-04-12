@@ -1,6 +1,6 @@
 from esser.entities import Entity
 from esser.reducer import BaseReducer
-from basket import events
+from basket import commands
 from items.aggregate import Item
 
 
@@ -24,10 +24,10 @@ class Basket(Entity):
     Basket is an Aggregate root
     """
     reducer = BasketReducer()
-    created = events.BasketCreated()
-    item_added = events.ItemAdded()
-    item_added_with_validation = events.ItemAddedWithExistanceValidation()
-    item_added_with_projection = events.ItemAddedWithProjection()
+    created = commands.CreateBasket()
+    item_added = commands.AddItem()
+    item_added_with_validation = commands.AddItemWithExistanceValidation()
+    item_added_with_projection = commands.AddItemWithProjection()
 
     def get_initial_state(self):
         return {

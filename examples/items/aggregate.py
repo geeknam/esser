@@ -1,7 +1,7 @@
 from esser.entities import Entity
 from esser.reducer import BaseReducer
 from esser.registry import register
-from items import events
+from items import commands
 from items import receivers
 
 
@@ -26,10 +26,10 @@ class ItemReducer(BaseReducer):
 class Item(Entity):
 
     reducer = ItemReducer()
-    price_updated = events.PriceUpdated()
-    colors_added = events.ColorsAdded()
-    created = events.ItemCreated()
-    deleted = events.Deleted()
+    price_updated = commands.UpdatePrice()
+    colors_added = commands.AddColors()
+    created = commands.CreateItem()
+    deleted = commands.DeleteItem()
 
     @property
     def price(self):

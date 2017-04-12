@@ -1,10 +1,20 @@
 import importlib
 from collections import defaultdict
-from esser.signals import event_received
+from esser.signals import event_received, event_post_save
 from esser.registry import registry
+from esser.repositories.base import Event
 
 
 def get_aggregate(aggregate_name, aggregate_id):
+    """Given an aggregate name and id return Aggregate instance
+
+    Args:
+        aggregate_name (str): Aggregate Name
+        aggregate_id (str): Aggregate ID
+
+    Returns:
+        esser.entities.Entity: aggregate / entity
+    """
     path = registry.get_path(aggregate_name)
     module, class_name = path.rsplit('.', 1)
     app_module = importlib.import_module(module)
@@ -13,6 +23,18 @@ def get_aggregate(aggregate_name, aggregate_id):
         aggregate_id=aggregate_id
     )
     return aggregate
+
+
+def image_to_event(image):
+    aggregate_id, version = image['aggregate_key']['S'].split(':')
+    return Event(
+        aggregate_name=image['aggregate_name']['S'],
+        aggregate_id=aggregate_id,
+        version=version,
+        event_type=image['event_type']['S'],
+        created_at=image['created_at']['S'],
+        event_data=image['event_data']['M'],
+    )
 
 
 class LambdaHandler(object):
@@ -29,7 +51,7 @@ class LambdaHandler(object):
         )
         event_class_attr = None
         for event_key, cls in aggregate.__class__.__dict__.items():
-            if cls.__class__.__name__ == event_name:
+            if hasattr(cls.__class__, 'event_name') and cls.__class__.event_name == event_name:
                 event_class_attr = event_key
         aggregate_event = getattr(aggregate, event_class_attr, None)
         if aggregate_event:
@@ -40,10 +62,20 @@ class LambdaHandler(object):
         aggregates = defaultdict(dict)
         for record in event['Records']:
             keys = record['dynamodb']['Keys']
+            # new_image = record['dynamodb']['NewImage']
             aggregate_name = keys['aggregate_name']['S']
             aggregate_key = keys['aggregate_key']['S']
             aggregate_id = aggregate_key.split(':')[0]
             aggregate = get_aggregate(aggregate_name, aggregate_id)
+            # event_post_save.send(
+            #     sender=aggregate.__class__,
+            #     aggregate=aggregate,
+            #     aggregate_name=aggregate.aggregate_name,
+            #     aggregate_id=aggregate.aggregate_id,
+            #     event_name=self.event_name,
+            #     version=event_version,
+            #     payload=attrs,
+            # )
             aggregates[aggregate_name][aggregate_id] = aggregate.current_state
         return aggregates
 
