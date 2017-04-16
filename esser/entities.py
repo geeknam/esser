@@ -3,6 +3,7 @@ import uuid
 from esser.commands import BaseCommand
 from esser.repositories.dynamodb import DynamoDBRepository
 from esser.utils import cached_property
+from esser.signals import event_pre_save
 
 
 class Entity(object):
@@ -46,12 +47,12 @@ class Entity(object):
     def get_state_at(self, version):
         sequence = self.repository.get_events(version)
         initial_state = self.get_last_snapshot() or self.get_initial_state()
-        return reduce(self.reducer.reduce, sequence, initial_state)
+        return reduce(self.event_handler.apply, sequence, initial_state)
 
     def get_current_state(self):
         sequence = self.repository.get_all_events()
         initial_state = self.get_last_snapshot() or self.get_initial_state()
-        return reduce(self.reducer.reduce, sequence, initial_state)
+        return reduce(self.event_handler.apply, sequence, initial_state)
 
     current_state = property(get_current_state)
     cached_current_state = cached_property(get_current_state)

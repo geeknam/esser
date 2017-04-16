@@ -1,11 +1,11 @@
 from esser.entities import Entity
-from esser.reducer import BaseReducer
+from esser.event_handler import BaseEventHandler
 from esser.registry import register
 from items import commands
 from items import receivers
 
 
-class ItemReducer(BaseReducer):
+class ItemEventHandler(BaseEventHandler):
 
     def on_item_created(self, aggregate, next_event):
         return self.on_created(aggregate, next_event)
@@ -25,7 +25,7 @@ class ItemReducer(BaseReducer):
 @register
 class Item(Entity):
 
-    reducer = ItemReducer()
+    event_handler = ItemEventHandler()
     price_updated = commands.UpdatePrice()
     colors_added = commands.AddColors()
     created = commands.CreateItem()

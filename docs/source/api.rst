@@ -15,6 +15,7 @@ Entities / Aggregates
     :members:
     :undoc-members:
 
+
 Repositories
 ==================
 
@@ -32,7 +33,8 @@ DynamoDB
     :members:
     :undoc-members:
 
-Events
+
+Commands
 -----------------------
 
 .. autoclass:: esser.commands.BaseCommand
@@ -48,10 +50,10 @@ Events
     :undoc-members:
 
 
-Reducers
+Event Handlers
 ---------------------
 
-.. autoclass:: esser.reducer.BaseReducer
+.. autoclass:: esser.event_handler.BaseEventHandler
     :members:
     :undoc-members:
 

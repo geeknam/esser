@@ -1,10 +1,10 @@
 from esser.entities import Entity
-from esser.reducer import BaseReducer
+from esser.event_handler import BaseEventHandler
 from basket import commands
 from items.aggregate import Item
 
 
-class BasketReducer(BaseReducer):
+class BasketEventHandler(BaseEventHandler):
 
     def on_basket_created(self, aggregate, next_event):
         return self.on_created(aggregate, next_event)
@@ -23,7 +23,7 @@ class Basket(Entity):
     """
     Basket is an Aggregate root
     """
-    reducer = BasketReducer()
+    event_handler = BasketEventHandler()
     created = commands.CreateBasket()
     item_added = commands.AddItem()
     item_added_with_validation = commands.AddItemWithExistanceValidation()

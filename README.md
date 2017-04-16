@@ -50,13 +50,14 @@ from esser.entities import Entity
 from esser.registry import register
 from items import commands
 from items import receivers
-from items.reducer import ItemReducer
+from items.event_handler import ItemEventHandler
 
 
 @register
 class Item(Entity):
-
-    reducer = ItemReducer()
+    
+    # set event handler to aggregate state
+    event_handler = ItemEventHandler()
     created = commands.CreateItem()
     price_updated = commands.UpdatePrice()
 
@@ -87,14 +88,14 @@ class UpdatePrice(BaseCommand):
     }
 ```
 
-#### Add reducer to fold event stream
+#### Add event handler to fold event stream
 
-`items/reducer.py`
+`items/event_handler.py`
 
 ```python
-from esser.reducer import BaseReducer
+from esser.event_handler import BaseEventHandler
 
-class ItemReducer(BaseReducer):
+class ItemEventHandler(BaseEventHandler):
 
     def on_item_created(self, aggregate, next_event):
         return self.on_created(aggregate, next_event)

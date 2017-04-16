@@ -1,7 +1,9 @@
 import re
 from esser.exceptions import AggregateDeleted
 
-re_camel_case = re.compile(r'(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))')
+re_camel_case = re.compile(
+    r'(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))'
+)
 
 
 def camel_case_to_spaces(value):
@@ -12,9 +14,22 @@ def camel_case_to_spaces(value):
     return re_camel_case.sub(r'_\1', value).strip('_').lower()
 
 
-class BaseReducer(object):
+class BaseEventHandler(object):
+    """
+    Responsible for building up the read state from all events
+    """
 
-    def reduce(self, aggregate, next_event):
+    def apply(self, aggregate, next_event):
+        """Called by reduce(), this method should find the
+        corresponding handler based on the event name
+
+        Args:
+            aggregate (dict): current state of an aggregate
+            next_event (esser.repositories.base.Event): next event to apply
+
+        Returns:
+            dict: aggregate state
+        """
         event_name = camel_case_to_spaces(next_event.event_type)
         self.update_version(aggregate, next_event)
         handler = getattr(self, 'on_%s' % event_name, None)
