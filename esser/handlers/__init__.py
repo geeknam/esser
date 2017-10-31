@@ -1,5 +1,4 @@
 import importlib
-import json
 from esser.signals import event_received, event_post_save
 from esser.registry import registry
 from esser.repositories.base import Event
@@ -26,18 +25,6 @@ class LambdaHandler(object):
             aggregate_id=aggregate_id
         )
         return aggregate
-
-    @staticmethod
-    def image_to_event(image):
-        aggregate_id, version = image['aggregate_key']['S'].split(':')
-        return Event(
-            aggregate_name=image['aggregate_name']['S'],
-            aggregate_id=aggregate_id,
-            version=version,
-            event_type=image['event_type']['S'],
-            created_at=image['created_at']['S'],
-            event_data=json.loads(image['event_data']['S']),
-        )
 
     def handle_event(self, event, context):
         event_name = event['EventName']
@@ -66,7 +53,7 @@ class LambdaHandler(object):
             aggregate_key = keys['aggregate_key']['S']
             aggregate_id = aggregate_key.split(':')[0]
             aggregate = self.get_aggregate(aggregate_name, aggregate_id)
-            event_obj = self.image_to_event(new_image)
+            event_obj = Event.from_image(new_image)
             event_post_save.send(
                 sender=aggregate.__class__,
                 event=event_obj

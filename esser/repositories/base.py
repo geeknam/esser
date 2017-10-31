@@ -1,4 +1,5 @@
 import json
+import dateutil.parser
 
 
 class Event(object):
@@ -42,6 +43,27 @@ class Event(object):
             str: JSON representing event
         """
         return json.dumps(self.as_dict())
+
+    @classmethod
+    def from_image(cls, image):
+        """Turn dynamodb image from stream event
+        into `esser.repositories.base.Event` object
+
+        Args:
+            image (dict): Dynamodb Strea NEW_IMAGE key
+
+        Returns:
+            esser.repositories.base.Event: Event objet
+        """
+        aggregate_id, version = image['aggregate_key']['S'].split(':')
+        return cls(
+            aggregate_name=image['aggregate_name']['S'],
+            aggregate_id=aggregate_id,
+            version=version,
+            event_type=image['event_type']['S'],
+            created_at=dateutil.parser.parse(image['created_at']['S']),
+            event_data=json.loads(image['event_data']['S']),
+        )
 
 
 class BaseRepository(object):

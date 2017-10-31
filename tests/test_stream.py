@@ -1,4 +1,5 @@
 from mock import patch
+import json
 from tests.base import BaseTestCase
 from examples.items.aggregate import Item
 from esser.handlers import handle_stream
@@ -10,7 +11,7 @@ class StreamTestCase(BaseTestCase):
         super(StreamTestCase, self).setUp()
         self.item = Item()
 
-    def stream_factory(self, aggregate_name, aggregate_key):
+    def stream_factory(self, event):
         return {
             "Records": [
                 {
@@ -22,19 +23,20 @@ class StreamTestCase(BaseTestCase):
                     "dynamodb": {
                         "Keys": {
                             "aggregate_name": {
-                                "S": aggregate_name
+                                "S": event.aggregate_name
                             },
                             "aggregate_key": {
-                                "S": aggregate_key
+                                "S": event.aggregate_key
+
                             }
                         },
                         'NewImage': {
-                            'created_at': {'S': '2017-04-12T06:56:06.191104+0000'},
-                            'aggregate_name': {'S': 'Item'},
-                            'aggregate_key': {'S': '83e7b629-58a0-4194-80e4-dab5dbbd63c1:1'},
-                            'event_type': {'S': 'ItemCreated'},
+                            'created_at': {'S': event.created_at.isoformat()},
+                            'aggregate_name': {'S': event.aggregate_name},
+                            'aggregate_key': {'S': event.aggregate_key},
+                            'event_type': {'S': event.event_type},
                             'event_data': {
-                                'S': '{"price": 15, "name": "Coffee"}'
+                                'S': json.dumps(event.event_data)
                             }
                         },
                         "SequenceNumber": "111",
@@ -56,5 +58,5 @@ class StreamTestCase(BaseTestCase):
                 }
             )
         event = self.item.price_updated.save(attrs={'price': 12.50})
-        stream = self.stream_factory('Item', event.aggregate_key)
+        stream = self.stream_factory(event)
         handle_stream(stream, {})
